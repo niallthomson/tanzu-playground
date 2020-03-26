@@ -1,0 +1,15 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"cert-manager"}})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by=overlay.subset({"name":"cert-manager"})
+        #@overlay/match-child-defaults missing_ok=True
+        - args:
+          #@overlay/append
+          - --default-issuer-name=letsencrypt-prod
+          #@overlay/append
+          - --default-issuer-kind=ClusterIssuer

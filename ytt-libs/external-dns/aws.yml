@@ -1,0 +1,42 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+
+#@ load("aws.lib.txt", "aws_secret_payload")
+
+#@ if data.values.provider == "aws":
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: external-dns-aws
+  namespace: #@ data.values.namespace
+type: Opaque
+data:
+  credentials: #@ base64.encode(aws_secret_payload())
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"external-dns"}})
+---
+spec:
+  template:
+    spec:
+      containers:
+        #@overlay/match by=overlay.subset({"name":"external-dns"})
+        #@overlay/match-child-defaults missing_ok=True
+        - args:
+          #@overlay/append
+          - --aws-zone-type=public
+          env:
+          #@overlay/append
+          - name: AWS_SHARED_CREDENTIALS_FILE
+            value: /.aws/credentials
+          volumeMounts:
+          - name: aws-credentials
+            mountPath: /.aws
+            readOnly: true
+      #@overlay/match missing_ok=True
+      volumes:
+        - name: aws-credentials
+          secret:
+            secretName: external-dns-aws
+#@ end

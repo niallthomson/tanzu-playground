@@ -1,0 +1,110 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: kpack
+  name: kpack-viz
+rules:
+- apiGroups:
+  - build.pivotal.io
+  resources:
+  - builds
+  - builds/status
+  - builds/finalizers
+  - images
+  - images/status
+  - images/finalizers
+  - builders
+  - builders/status
+  - clusterbuilders
+  - clusterbuilders/status
+  - sourceresolvers
+  - sourceresolvers/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kpack-viz
+  namespace: kpack
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kpack-viz
+subjects:
+- kind: ServiceAccount
+  name: kpack-viz
+  namespace: kpack
+roleRef:
+  kind: ClusterRole
+  name: kpack-viz
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: kpack-viz
+  name: kpack-viz
+  namespace: kpack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: kpack-viz
+  template:
+    metadata:
+      labels:
+        run: kpack-viz
+    spec:
+      containers:
+      - image: nthomsonpivotal/kpack-viz:0.0.1
+        imagePullPolicy: Always
+        name: kpack-viz
+      serviceAccountName: kpack-viz
+      automountServiceAccountToken: true
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kpack-viz
+  namespace: kpack
+  labels:
+    run: kpack-viz
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: kpack-viz
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kpack-viz
+  namespace: kpack
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+  - host: ${domain}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kpack-viz
+          servicePort: 8080
+  tls:
+    - hosts:
+      - ${domain}
+      secretName: kpack-viz-tls

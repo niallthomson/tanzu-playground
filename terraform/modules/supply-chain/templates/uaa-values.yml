@@ -1,0 +1,21 @@
+env:
+  ENABLE_OPI_STAGING: true
+  DOMAIN: "${DOMAIN}"
+  UAA_HOST: "uaa.${DOMAIN}"
+  UAA_PORT: 443
+  UAA_PUBLIC_PORT: 443
+  
+kube:
+  auth: rbac
+  storage_class:
+    persistent: "standard"
+    shared: "standard"
+
+secrets:
+  UAA_ADMIN_CLIENT_SECRET: "${UAA_ADMIN_CLIENT_SECRET}"
+
+ingress:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+  enabled: true

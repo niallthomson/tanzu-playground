@@ -1,0 +1,12 @@
+externalURL: https://${harbor_domain}
+expose:
+  tls:
+    secretName: harbor-tls-secret
+    notarySecretName: harbor-tls-secret
+  ingress:
+    hosts:
+      core: ${harbor_domain}
+      notary: ${notary_domain}
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/enable-cors: "true"

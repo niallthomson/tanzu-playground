@@ -1,0 +1,38 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+#@ load("@ytt:assert", "assert")
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-iam
+  namespace: #@ data.values.certmanager.namespace
+type: Opaque
+data:
+  access_key_id: #@ base64.encode(data.values.certmanager.accessKeyID)
+  secret_access_key: #@ base64.encode(data.values.certmanager.secretAccessKey)
+---
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: #@ data.values.certmanager.namespace
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: #@ data.values.certmanager.acmeEmail or assert.fail("missing ACME email")
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector:
+        dnsZones:
+            - #@ data.values.certmanager.domain or assert.fail("missing domain")
+      dns01:
+        route53:
+          region: #@ data.values.certmanager.region or assert.fail("missing region")
+          hostedZoneID: #@ data.values.certmanager.hostedZoneID or assert.fail("missing hosted zone ID")
+          accessKeyID: #@ data.values.certmanager.accessKeyID or assert.fail("missing access key ID")
+          secretAccessKeySecretRef:
+            name: aws_iam
+            key: secret_access_key

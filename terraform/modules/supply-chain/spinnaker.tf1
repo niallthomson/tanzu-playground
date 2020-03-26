@@ -1,0 +1,25 @@
+data "template_file" "spinnaker_config" {
+  template = "${file("${path.module}/templates/spinnaker-values.yml")}"
+
+  vars = {
+    spinnaker_domain = "${local.spinnaker_domain}"
+    spinnaker_gate_domain = "${local.spinnaker_gate_domain}"
+    uaa_url = "https://${local.uaa_domain}:443"
+  }
+}
+
+resource "helm_release" "spinnaker" {
+  depends_on = [
+    "null_resource.uaa_blocker"
+  ]
+
+  name       = "spinnaker"
+  namespace  = "spinnaker"
+  chart      = "stable/spinnaker"
+  version    = "1.23.3"
+
+  wait       = false
+  timeout    = 600
+
+  values = ["${data.template_file.spinnaker_config.rendered}"]
+}

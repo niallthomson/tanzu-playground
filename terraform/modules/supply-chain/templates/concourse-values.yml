@@ -1,0 +1,37 @@
+concourse:
+  deployment:
+    apiVersion: apps/v1
+  statefulset:
+    apiVersion: apps/v1
+  web:
+    externalUrl: "https://${concourse_domain}"
+    auth:
+      mainTeam:
+        oidc:
+          user: niall
+          group: developers
+      oidc:
+        enabled: true
+        displayName: "UAA"
+        issuer: https://${uaa_domain}:443/oauth/token
+        useCaCert: false
+        scope: "openid,roles,uaa.user"
+        userNameKey: user_name
+
+web:
+  ingress:
+    enabled: true
+    hosts:
+    - ${concourse_domain}
+    tls:
+      - hosts:
+        - ${concourse_domain}
+        secretName: concourse-tls-secret
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      kubernetes.io/tls-acme: "true"
+
+secrets:
+  localUsers: "test:${user_password}"
+  oidcClientId: concourse-client
+  oidcClientSecret: abcd1234

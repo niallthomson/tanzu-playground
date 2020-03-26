@@ -1,0 +1,69 @@
+ingress:
+  enabled: true
+  host: "${spinnaker_domain}"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+  tls:
+   - secretName: spinnaker-tls
+     hosts:
+       - ${spinnaker_domain}
+
+ingressGate:
+  enabled: true
+  host: "${spinnaker_gate_domain}"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+  tls:
+   - secretName: spinnaker-gate-tls
+     hosts:
+       - ${spinnaker_gate_domain}
+
+halyard:
+  spinnakerVersion: 1.18.5
+  image:
+    tag: 1.29.0
+    
+  additionalScripts:
+    create: true
+    data:
+      configure_oauth.sh: |
+        $HAL_COMMAND config security authn oauth2 edit \
+          --client-authentication-scheme header \
+          --client-id spinnaker-client \
+          --client-secret abcd1234 \
+          --provider other \
+          --scope openid,uaa.user,uaa.resource \
+          --user-info-mapping-username user_name \
+          --user-info-mapping-email email \
+          --user-info-mapping-first-name given_name \
+          --user-info-mapping-last-name family_name \
+          --user-authorization-uri=${uaa_url}/oauth/authorize \
+          --access-token-uri=${uaa_url}/oauth/token \
+          --user-info-uri=${uaa_url}/userinfo
+
+        $HAL_COMMAND config security authn oauth2 enable
+
+        $HAL_COMMAND config security ui edit --override-base-url "https://${spinnaker_domain}"
+        $HAL_COMMAND config security api edit --override-base-url "https://${spinnaker_gate_domain}"
+
+  additionalProfileConfigMaps:
+    create: true
+    data:
+      gate-local.yml: |-
+        server:
+          tomcat:
+            protocolHeader: X-Forwarded-Proto
+            remoteIpHeader: X-Forwarded-For
+            internalProxies: .*
+            httpsServerPort: X-Forwarded-Port
+
+dockerRegistries:
+- name: dockerhub
+  address: index.docker.io
+  repositories:
+    - library/alpine
+    - library/ubuntu
+    - library/centos
+    - library/nginx

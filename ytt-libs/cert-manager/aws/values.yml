@@ -1,0 +1,15 @@
+#@data/values
+---
+certmanager:
+  #@overlay/match missing_ok=True
+  acmeEmail: ""
+  #@overlay/match missing_ok=True
+  domain: ""
+  #@overlay/match missing_ok=True
+  region: ""
+  #@overlay/match missing_ok=True
+  hostedZoneID: ""
+  #@overlay/match missing_ok=True
+  accessKeyID: ""
+  #@overlay/match missing_ok=True
+  secretAccessKey: ""

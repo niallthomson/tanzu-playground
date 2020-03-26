@@ -1,0 +1,4 @@
+#@data/values
+---
+certmanager:
+  namespace: default

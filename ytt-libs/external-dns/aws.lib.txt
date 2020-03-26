@@ -1,0 +1,6 @@
+(@ load("@ytt:data", "data") @)
+(@ def aws_secret_payload(): -@)
+[default]
+aws_access_key_id = (@= data.values.aws.accessKey @)
+aws_secret_access_key = (@= data.values.aws.secretAccessKey @)
+(@- end @)
