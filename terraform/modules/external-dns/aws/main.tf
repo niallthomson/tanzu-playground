@@ -6,6 +6,7 @@ module "common" {
   zone_id_filter = var.zone_id_filter
   ytt_lib_dir = var.ytt_lib_dir
   dns_provider = "aws"
+  enable_istio = var.enable_istio
 
   values = {
     "aws.accessKey"       = aws_iam_access_key.key.id

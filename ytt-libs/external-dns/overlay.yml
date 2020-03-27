@@ -49,7 +49,7 @@ spec:
           #@overlay/append
           - #@ "--domain-filter="+data.values.domainFilter
           #@ end
-          #@ if data.values.enableIstio:
+          #@ if data.values.enableIstio and data.values.enableIstio != "false":
           #@overlay/append
           - --source=istio-gateway
           #@ end

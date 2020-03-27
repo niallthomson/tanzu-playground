@@ -1,6 +1,6 @@
 data "k14s_ytt" "externaldns" {
   files = [
-    "https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.6/docs/examples/external-dns.yaml",
+    //"https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.6/docs/examples/external-dns.yaml",
     "${var.ytt_lib_dir}/external-dns"
   ]
 
@@ -9,6 +9,7 @@ data "k14s_ytt" "externaldns" {
     domainFilter = var.domain_filter
     provider = var.dns_provider
     zoneIdFilter = var.zone_id_filter
+    enableIstio = var.enable_istio
   }, var.values)
 }
 
@@ -20,9 +21,15 @@ resource "null_resource" "blocker" {
 
 resource "k14s_app" "externaldns" {
   depends_on = [null_resource.blocker]
-  
+
   name = "externaldns"
   namespace = "default"
 
   yaml = data.k14s_ytt.externaldns.result
+
+  // Sleep before destroying so external-dns has time to clean up records
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "sleep 90"
+  }
 }

@@ -19,6 +19,9 @@ variable "values" {
   default = {}
 }
 
+variable "enable_istio" {
+  default = false
+}
 
 variable "ytt_lib_dir" {}
 
