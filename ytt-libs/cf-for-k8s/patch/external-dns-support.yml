@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:template", "template")
+
+#@overlay/match by=overlay.subset({"kind": "Gateway", "metadata":{"name": "istio-ingressgateway", "namespace": "cf-system"}})
+---
+spec:
+  servers:
+    #@overlay/match by=overlay.all,expects="1+"
+    #@overlay/match-child-defaults missing_ok=True
+    - hosts:
+      #@overlay/match by=overlay.index(0)
+      - #@ "*." + data.values.system_domain

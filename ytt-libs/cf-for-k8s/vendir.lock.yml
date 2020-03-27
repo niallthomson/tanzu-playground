@@ -1,0 +1,9 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: Restructure values entry for app registry config...
+      sha: e6a3fa336717962ca7a633afb6bed3b143a03b73
+    path: github.com/cloudfoundry/cf-for-k8s
+  path: vendor
+kind: LockConfig

@@ -1,0 +1,56 @@
+#@ load("@ytt:data", "data")
+#@ load("deployment.star", "spring_profiles")
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uaa
+spec:
+  selector:
+    matchLabels:
+      app: uaa-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: uaa-deployment
+    spec: #! pod spec
+      serviceAccountName: uaa
+      containers:
+        - name: uaa
+          image: #@ data.values.image
+          resources:
+            requests:
+              memory: #@ data.values.resources.requests.memory
+              cpu: #@ data.values.resources.requests.cpu
+          ports:
+            - name: http-uaa
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: BPL_TOMCAT_ACCESS_LOGGING
+              value: #@ data.values.tomcat.accessLoggingEnabled
+            - name: JAVA_OPTS
+              value: "-Djava.security.egd=file:/dev/./urandom -Dlogging.config=/etc/config/log4j2.properties -Dlog4j.configurationFile=/etc/config/log4j2.properties"
+            - name: spring_profiles
+              value: #@ spring_profiles(data.values.database.scheme)
+            - name: CLOUDFOUNDRY_CONFIG_PATH
+              value: /etc/config
+          volumeMounts:
+          - name: uaa-config
+            mountPath: /etc/config
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http-uaa
+            failureThreshold: 25
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http-uaa
+      volumes:
+      - name: uaa-config
+        configMap:
+          name: uaa-config
