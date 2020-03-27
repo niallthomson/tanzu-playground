@@ -13,7 +13,7 @@ It will:
 Example:
 
 ```
-module "cf-for-k8s" {
+module "cf_for_k8s" {
   source = "github.com/niallthomson/tanzu-playground//terraform/tmc/aws/cf-for-k8s"
 
   tmc_key             = "<tmc api key>"
@@ -26,6 +26,18 @@ module "cf-for-k8s" {
 
   environment_name    = "demo"
   dns_prefix          = "demo"
+}
+
+output "cf_api_endpoint" {
+  value       = module.cf_for_k8s.cf_api_endpoint
+}
+
+output "cf_admin_username" {
+  value       = module.cf_for_k8s.cf_admin_username
+}
+
+output "cf_admin_password" {
+  value       = module.cf_for_k8s.cf_admin_password
 }
 ```
 

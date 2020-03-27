@@ -12,7 +12,7 @@ It will:
 Example:
 
 ```
-module "cf-for-k8s" {
+module "cf_for_k8s" {
   source = "github.com/niallthomson/tanzu-playground//terraform/gke/cf-for-k8s"
 
   acme_email          = "nthomson@pivotal.io"
@@ -22,6 +22,18 @@ module "cf-for-k8s" {
   dns_prefix          = "demo"
 
   project             = "fe-nthomson"
+}
+
+output "cf_api_endpoint" {
+  value       = module.cf_for_k8s.cf_api_endpoint
+}
+
+output "cf_admin_username" {
+  value       = module.cf_for_k8s.cf_admin_username
+}
+
+output "cf_admin_password" {
+  value       = module.cf_for_k8s.cf_admin_password
 }
 ```
 
