@@ -1,7 +1,7 @@
 
 module "external_dns" {
   source = "../../modules/external-dns/gcp"
-  ytt_lib_dir      = "${path.module}/../../../ytt-libs"
+  ytt_lib_dir      = local.ytt_lib_dir
 
   environment_name = var.environment_name
   domain_filter = module.dns.base_domain

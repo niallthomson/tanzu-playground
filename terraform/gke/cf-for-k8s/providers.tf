@@ -19,3 +19,7 @@ provider "k14s" {
     kubeconfig_yaml = data.template_file.kubeconfig.rendered
   }
 }
+
+locals {
+  ytt_lib_dir = "${path.module}/../../../ytt-libs"
+}

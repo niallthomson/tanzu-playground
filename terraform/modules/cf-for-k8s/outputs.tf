@@ -1,3 +1,7 @@
+output "sys_domain" {
+  value = local.sys_domain
+}
+
 output "cf_api_endpoint" {
   value = "api.${local.sys_domain}"
 }

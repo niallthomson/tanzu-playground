@@ -13,6 +13,10 @@ data "template_file" "values" {
   vars = {
     admin_password = random_password.admin_password.result
     domain       = local.sys_domain
+
+    tls_cert     = base64encode(var.tls_cert)
+    tls_key     = base64encode(var.tls_key)
+    tls_ca_cert     = base64encode(var.tls_ca_cert)
   }
 }
 
