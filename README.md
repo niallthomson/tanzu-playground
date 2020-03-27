@@ -28,4 +28,4 @@ Below is a summary of the aggregate modules that may be of immediate use.
 | Module | Purpose | TMC (AWS) | GKE |
 |---|---|---|---|
 | `simple-cluster` | Basic Kubernetes cluster with ingress, external-dns and certmanager | [Link](terraform/tmc/simple-cluster/aws/README.md) | [Link](terraform/gke/simple-cluster/README.md) |
-| `cf-for-k8s` | Basic Kubernetes cluster with ingress, external-dns and certmanager | [Link](terraform/tmc/cf-for-k8s/aws/README.md) | [Link](terraform/gke/cf-for-k8s/README.md) |
+| `cf-for-k8s` | Simple installation of Cloud Foundry on Kubernetes | [Link](terraform/tmc/cf-for-k8s/aws/README.md) | [Link](terraform/gke/cf-for-k8s/README.md) |
