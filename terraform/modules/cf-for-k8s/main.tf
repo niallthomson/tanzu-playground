@@ -33,9 +33,3 @@ resource "k14s_app" "externaldns" {
 
   yaml = data.k14s_ytt.cf_for_k8s.result
 }
-
-resource "local_file" "test" {
-  content  = data.k14s_ytt.cf_for_k8s.result
-  
-  filename = "${path.module}/test.yml"
-}
