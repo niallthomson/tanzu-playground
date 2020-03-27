@@ -18,5 +18,5 @@ resource "k14s_app" "nginx" {
   name = "nginx-ingress"
   namespace = "default"
 
-  yaml = data.k14s_ytt.nginx.result
+  config_yaml = data.k14s_ytt.nginx.result
 }

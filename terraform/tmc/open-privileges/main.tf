@@ -14,5 +14,5 @@ resource "k14s_app" "tmc_psp" {
   name = "tmc-psp"
   namespace = "default"
 
-  yaml = data.k14s_ytt.tmc_psp.result
+  config_yaml = data.k14s_ytt.tmc_psp.result
 }

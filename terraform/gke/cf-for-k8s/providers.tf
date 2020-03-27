@@ -15,5 +15,7 @@ provider "kubernetes" {
 }
 
 provider "k14s" {
-  kubeconfig_yml = data.template_file.kubeconfig.rendered
+  kapp {
+    kubeconfig_yaml = data.template_file.kubeconfig.rendered
+  }
 }

@@ -4,7 +4,7 @@ system_domain: "${domain}"
 app_domains:
 #@overlay/append
 - "${domain}"
-cf_admin_password: gy5hsigvj9ve25bgo4f8
+cf_admin_password: ${admin_password}
 
 cf_blobstore:
   secret_key: phhyci7f19z5fy1iqsn2

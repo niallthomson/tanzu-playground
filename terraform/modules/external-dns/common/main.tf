@@ -25,7 +25,7 @@ resource "k14s_app" "externaldns" {
   name = "externaldns"
   namespace = "default"
 
-  yaml = data.k14s_ytt.externaldns.result
+  config_yaml = data.k14s_ytt.externaldns.result
 
   // Sleep before destroying so external-dns has time to clean up records
   provisioner "local-exec" {

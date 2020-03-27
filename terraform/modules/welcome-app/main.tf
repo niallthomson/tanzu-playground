@@ -19,5 +19,5 @@ resource "k14s_app" "welcome_app" {
   name = "welcome-app"
   namespace = "default"
 
-  yaml = data.k14s_ytt.welcome_app.result
+  config_yaml = data.k14s_ytt.welcome_app.result
 }
