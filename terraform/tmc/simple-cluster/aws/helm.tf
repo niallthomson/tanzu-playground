@@ -1,29 +1,7 @@
-resource "kubernetes_service_account" "helm" {
-  depends_on = [tmc_node_pool.pools]
+module "helm" {
+  source = "../../../modules/helm"
 
-  metadata {
-    name = "helm"
-    namespace = "kube-system"
-  }
-}
-
-resource "kubernetes_cluster_role_binding" "helm" {
-  metadata {
-    name = kubernetes_service_account.helm.metadata.0.name
-  }
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind = "ClusterRole"
-    name = "cluster-admin"
-  }
-  subject {
-    kind = "ServiceAccount"
-    name = kubernetes_service_account.helm.metadata.0.name
-    namespace = "kube-system"
-
-    # https://github.com/terraform-providers/terraform-provider-kubernetes/issues/204
-    api_group = ""
-  }
+  blocker = join("", tmc_node_pool.pools.*.id)
 }
 
 resource "local_file" "kubeconfig" {
@@ -34,7 +12,7 @@ resource "local_file" "kubeconfig" {
 provider "helm" {
   install_tiller = true
   tiller_image = "gcr.io/kubernetes-helm/tiller:v2.13.1"
-  service_account = kubernetes_cluster_role_binding.helm.metadata.0.name
+  service_account = module.helm.service_account_name
 
   version = "~> 0.10.0"
 

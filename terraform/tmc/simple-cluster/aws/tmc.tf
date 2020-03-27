@@ -7,7 +7,7 @@ data "tmc_cluster_group" "group" {
 }
 
 resource "tmc_cluster" "cluster" {
-  name              = "cnp-tmc-simple-${var.environment_name}"
+  name              = "tanzu-tmc-simple-${var.environment_name}"
   description       = "Automated cluster created for ${var.environment_name}"
   group             = data.tmc_cluster_group.group.name
   account_name      = "PA-nthomson"
@@ -59,8 +59,4 @@ module "privileges" {
   ytt_lib_dir      = "${path.module}/../../../../ytt-libs"
 
   blocker = join("", tmc_node_pool.pools.*.id)
-}
-
-provider "k14s" {
-  kubeconfig_yml = data.tmc_kubeconfig.kubeconfig.content
 }
