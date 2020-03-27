@@ -1,7 +1,7 @@
 module "infrastructure" {
   source = "../../../modules/infrastructure/aws"
 
-  environment_name           = var.environment_name
+  environment_name           = local.full_environment_prefix
   region                     = var.region
   hosted_zone_id             = module.dns.hosted_zone_id
   acme_email                 = var.acme_email

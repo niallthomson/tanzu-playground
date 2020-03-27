@@ -1,16 +1,16 @@
-provider "tmc" {
-  api_key = var.tmc_key
+locals {
+  full_environment_prefix = "tanzu-tmc-simple-${var.environment_name}"
 }
 
 data "tmc_cluster_group" "group" {
-  name = "pa-nthomson"
+  name = var.tmc_cluster_group
 }
 
 resource "tmc_cluster" "cluster" {
-  name              = "tanzu-tmc-simple-${var.environment_name}"
+  name              = local.full_environment_prefix
   description       = "Automated cluster created for ${var.environment_name}"
   group             = data.tmc_cluster_group.group.name
-  account_name      = "PA-nthomson"
+  account_name      = var.tmc_account_name
   version           = var.kubernetes_version
   high_availability = false
 

@@ -2,6 +2,10 @@ provider "aws" {
   region = var.region
 }
 
+provider "tmc" {
+  api_key = var.tmc_key
+}
+
 provider "kubernetes" {
   host                   = data.tmc_kubeconfig.kubeconfig.server
 
