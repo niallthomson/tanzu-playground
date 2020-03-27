@@ -20,7 +20,7 @@ resource "tmc_cluster" "cluster" {
 
   aws_config {
     control_plane_vm_flavor = var.master_instance_type
-    ssh_key_name            = "default"
+    ssh_key_name            = var.tmc_ssh_key_name
     vpc_cidr_block          = "10.0.0.0/16"
     region                  = var.region
     az_list                 = var.availability_zones

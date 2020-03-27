@@ -24,6 +24,8 @@ variable "tmc_account_name" {}
 
 variable "tmc_cluster_group" {}
 
+variable "tmc_ssh_key_name" {}
+
 variable "master_instance_type" {
   default = "m5.large"
 }
