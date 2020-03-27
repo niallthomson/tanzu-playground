@@ -10,5 +10,5 @@ data "template_file" "kubeconfig" {
 resource "local_file" "kubeconfig" {
   content  = data.template_file.kubeconfig.rendered
   
-  filename = "${path.module}/kubeconfig"
+  filename = "${path.module}/kubeconfig.tmpl"
 }
