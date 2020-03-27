@@ -8,7 +8,7 @@ resource "google_container_cluster" "default" {
   name = local.full_environment_prefix
   location = var.zone
   initial_node_count = 5
-  min_master_version = "1.15.9-gke.26"
+  min_master_version = var.kubernetes_version
 
   node_config {
     image_type = "UBUNTU"
