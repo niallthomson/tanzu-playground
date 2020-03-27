@@ -31,16 +31,25 @@ spec:
         #@overlay/match by=overlay.subset({"name":"external-dns"})
         #@overlay/match-child-defaults missing_ok=True
         - args:
-          #@overlay/match by=overlay.index(2)
-          - #@ "--domain-filter="+data.values.domainFilter
-          #@overlay/match by=overlay.index(3)
-          - #@ "--provider="+data.values.provider
-          #@overlay/match by=overlay.index(4)
-          - --policy=sync
           #@overlay/remove
           #@overlay/match by=overlay.index(5)
-          - 
+          -
+          #@overlay/remove
+          #@overlay/match by=overlay.index(2)
+          -
+          #@overlay/match by=overlay.index(2)
+          - #@ "--provider="+data.values.provider
+          #@overlay/match by=overlay.index(3)
+          - --policy=sync
+          #@ if data.values.zoneIdFilter != "":
           #@overlay/append
           - #@ "--zone-id-filter="+data.values.zoneIdFilter
+          #@ end
+          #@ if data.values.domainFilter != "":
+          #@overlay/append
+          - #@ "--domain-filter="+data.values.domainFilter
+          #@ end
+          #@ if data.values.enableIstio:
           #@overlay/append
           - --source=istio-gateway
+          #@ end

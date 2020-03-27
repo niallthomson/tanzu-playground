@@ -4,6 +4,7 @@ namespace: external-dns
 domainFilter: ""
 provider: ""
 zoneIdFilter: ""
+enableIstio: false
 
 aws:
   accessKey: ""
