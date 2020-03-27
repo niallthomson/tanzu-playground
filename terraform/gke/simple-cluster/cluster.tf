@@ -12,7 +12,7 @@ resource "google_container_cluster" "default" {
 
   node_config {
     image_type = "UBUNTU"
-    machine_type = "n1-standard-4"
+    machine_type = "n1-standard-2"
 
     metadata = {
       "disable-legacy-endpoints" = "true"
