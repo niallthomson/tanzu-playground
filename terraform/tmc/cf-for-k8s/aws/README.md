@@ -28,6 +28,14 @@ module "cf-for-k8s" {
 }
 ```
 
+## Pre-requisites
+
+The following are pre-requisites to run the above Terraform:
+- AWS account, with `aws` CLI logged in locally
+- Terraform 0.12 installed
+- [terraform-provider-k14s](https://github.com/k14s/terraform-provider-k14s) installed as a TF plugin
+- DNS set up meeting the appropriate standards ([see here](/terraform/docs/dns.md))
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
