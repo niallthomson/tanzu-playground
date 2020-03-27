@@ -10,4 +10,7 @@ For example, this is the structure of the domains used to test the modules:
 
 ![architecture](dns-structure.png)
 
-The DNS for `paasify.org` itself is managed in GoDaddy, with a sub-domain for each cloud delegated to that clouds DNS service.
+In this setup:
+- The root domain `paasify.org` is registered and managed in GoDaddy
+- A sub-domain for each cloud has been manually created and delegated via NS records
+- The Terraform modules will then create sub-domains, such as `env1.aws.paasify.org` from these cloud-specific zones
