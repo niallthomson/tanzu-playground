@@ -29,7 +29,7 @@ resource "k14s_app" "externaldns" {
 
   // Sleep before destroying so external-dns has time to clean up records
   provisioner "local-exec" {
-    when    = "destroy"
+    when    = destroy
     command = "sleep 90"
   }
 }
