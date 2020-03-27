@@ -4,6 +4,7 @@ This Terraform module installs `cf-for-k8s` (Cloud Foundry on Kubernetes) using 
 
 It will:
 - Create a TMC cluster on AWS of the correct minimal size
+- Configure a Pod Security Policy to allow privileged containers (necessary for Istio)
 - Create an AWS Route53 DNS hosted zone and wire it up to an existing base zone
 - Install `cf-for-k8s` from the official `ytt` configuration
 - Install `external-dns` and ensure its configured correctly

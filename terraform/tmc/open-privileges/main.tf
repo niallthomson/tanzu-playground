@@ -8,10 +8,10 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_app" "tmc_psp" {
+resource "k14s_kapp" "tmc_psp" {
   depends_on = [null_resource.blocker]
   
-  name = "tmc-psp"
+  app = "tmc-psp"
   namespace = "default"
 
   config_yaml = data.k14s_ytt.tmc_psp.result

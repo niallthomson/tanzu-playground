@@ -11,6 +11,8 @@ data "k14s_ytt" "externaldns" {
     zoneIdFilter = var.zone_id_filter
     enableIstio = var.enable_istio
   }, var.values)
+
+  ignore_unknown_comments = true
 }
 
 resource "null_resource" "blocker" {
@@ -19,10 +21,10 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_app" "externaldns" {
+resource "k14s_kapp" "externaldns" {
   depends_on = [null_resource.blocker]
 
-  name = "externaldns"
+  app = "externaldns"
   namespace = "default"
 
   config_yaml = data.k14s_ytt.externaldns.result

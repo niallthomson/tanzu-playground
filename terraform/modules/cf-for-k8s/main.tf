@@ -31,10 +31,10 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_app" "cf_for_k8s" {
+resource "k14s_kapp" "cf_for_k8s" {
   depends_on = [null_resource.blocker]
   
-  name = "cf"
+  app = "cf"
   namespace = "default"
 
   config_yaml = data.k14s_ytt.cf_for_k8s.result

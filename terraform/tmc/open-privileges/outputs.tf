@@ -1,3 +1,3 @@
 output "blocker" {
-  value = k14s_app.tmc_psp.id
+  value = k14s_kapp.tmc_psp.id
 }

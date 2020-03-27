@@ -12,10 +12,10 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_app" "nginx" {
+resource "k14s_kapp" "nginx" {
   depends_on = [null_resource.blocker]
   
-  name = "nginx-ingress"
+  app = "nginx-ingress"
   namespace = "default"
 
   config_yaml = data.k14s_ytt.nginx.result

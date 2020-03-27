@@ -13,10 +13,10 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_app" "welcome_app" {
+resource "k14s_kapp" "welcome_app" {
   depends_on = [null_resource.blocker]
   
-  name = "welcome-app"
+  app = "welcome-app"
   namespace = "default"
 
   config_yaml = data.k14s_ytt.welcome_app.result
