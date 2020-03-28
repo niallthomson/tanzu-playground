@@ -4,115 +4,38 @@ resource "kubernetes_namespace" "certmanager" {
   }
 }
 
-resource "kubernetes_secret" "iam_secret" {
-  metadata {
-    name      = "aws-iam"
-    namespace = kubernetes_namespace.certmanager.metadata[0].name
-  }
-
-  data = {
-    access_key        = aws_iam_access_key.key.id
-    secret_access_key = aws_iam_access_key.key.secret
-  }
-
-  type = "Opaque"
-}
-
-resource "kubernetes_job" "certmanager_prereq" {
-  depends_on = [kubernetes_namespace.certmanager]
-
-  metadata {
-    name      = "certmanager-prereq"
-    namespace = "kube-system"
-  }
-
-  spec {
-    template {
-      metadata {
-      }
-      spec {
-        container {
-          name    = "run"
-          image   = "bitnami/kubectl"
-          command = ["kubectl", "apply", "--validate=false", "-f", "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.13/deploy/manifests/00-crds.yaml"]
-        }
-
-        restart_policy                  = "Never"
-        service_account_name            = var.apply_service_account_name
-        automount_service_account_token = true
-      }
-    }
-    backoff_limit = 4
-  }
-
+resource "null_resource" "in_blocker" {
   provisioner "local-exec" {
-    command = "sleep 30"
+    command = "echo 'Unblocked on ${var.blocker}'"
   }
 }
 
-data "template_file" "issuers" {
-  template = file("${path.module}/templates/issuer.yml")
+data "template_file" "prereqs" {
+  template = file("${path.module}/templates/prereqs.yml")
 
   vars = {
-    accessKey    = aws_iam_access_key.key.id
-    region       = var.region
-    acmeEmail    = var.acme_email
-    hostedZoneId = var.hosted_zone_id
-    domain       = var.domain
+    accessKey              = aws_iam_access_key.key.id
+    region                 = var.region
+    acmeEmail              = var.acme_email
+    hostedZoneId           = var.hosted_zone_id
+    domain                 = var.domain
+    namespace              = kubernetes_namespace.certmanager.metadata[0].name
+    encodedAccessKey       = base64encode(aws_iam_access_key.key.id)
+    encodedSecretAccessKey = base64encode(aws_iam_access_key.key.secret)
   }
 }
 
-resource "kubernetes_config_map" "issuer_config_map" {
-  metadata {
-    name      = "issuer-map"
-    namespace = "kube-system"
-  }
+resource "k14s_kapp" "prereqs" {
+  depends_on = [null_resource.in_blocker]
 
-  data = {
-    "issuer.yml" = data.template_file.issuers.rendered
-  }
-}
+  app = "certmanager-prereqs"
+  namespace = "default"
 
-resource "kubernetes_job" "certmanager_issuer" {
-  depends_on = [
-    kubernetes_job.certmanager_prereq,
-    kubernetes_secret.iam_secret,
+  files = [
+    "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.13/deploy/manifests/00-crds.yaml"
   ]
 
-  metadata {
-    name      = "certmanager-issuer"
-    namespace = "kube-system"
-  }
-  spec {
-    template {
-      metadata {
-      }
-      spec {
-        container {
-          name    = "run"
-          image   = "bitnami/kubectl"
-          command = ["kubectl", "apply", "--validate=false", "-f", "/var/issuer/issuer.yml"]
-
-          volume_mount {
-            mount_path = "/var/issuer"
-            name       = "issuer"
-          }
-        }
-
-        volume {
-          name = "issuer"
-          config_map {
-            name = kubernetes_config_map.issuer_config_map.metadata[0].name
-          }
-        }
-
-        restart_policy                  = "Never"
-        service_account_name            = var.apply_service_account_name
-        automount_service_account_token = true
-      }
-    }
-    backoff_limit = 4
-  }
+  config_yaml = data.template_file.prereqs.rendered
 }
 
 data "helm_repository" "jetstack" {
@@ -121,7 +44,7 @@ data "helm_repository" "jetstack" {
 }
 
 resource "helm_release" "certmanager" {
-  depends_on = [kubernetes_job.certmanager_prereq]
+  depends_on = [k14s_kapp.prereqs]
 
   name       = "certmanager"
   namespace  = kubernetes_namespace.certmanager.metadata[0].name
@@ -154,3 +77,6 @@ resource "helm_release" "certmanager" {
   }
 }
 
+resource "null_resource" "out_blocker" {
+  depends_on = [helm_release.certmanager]
+}

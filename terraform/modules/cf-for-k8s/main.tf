@@ -14,9 +14,9 @@ data "template_file" "values" {
     admin_password = random_password.admin_password.result
     domain       = local.sys_domain
 
-    tls_cert     = base64encode(var.tls_cert)
-    tls_key     = base64encode(var.tls_key)
-    tls_ca_cert     = base64encode(var.tls_ca_cert)
+    tls_cert     = base64encode(tls_locally_signed_cert.cf.cert_pem)
+    tls_key     = base64encode(tls_private_key.cf.private_key_pem)
+    tls_ca_cert     = base64encode(tls_self_signed_cert.acme_ca.cert_pem)
   }
 }
 

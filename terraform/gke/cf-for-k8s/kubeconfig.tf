@@ -6,9 +6,3 @@ data "template_file" "kubeconfig" {
     token = data.google_client_config.current.access_token
   }
 }
-
-resource "local_file" "kubeconfig" {
-  content  = data.template_file.kubeconfig.rendered
-  
-  filename = "${path.module}/kubeconfig"
-}

@@ -1,4 +1,3 @@
-
 module "external_dns" {
   source = "../../../modules/external-dns/aws"
   ytt_lib_dir      = local.ytt_lib_dir
@@ -9,5 +8,5 @@ module "external_dns" {
 
   enable_istio = true
 
-  blocker = join(",", tmc_node_pool.pools.*.id)
+  blocker = module.tmc_privileges.blocker
 }

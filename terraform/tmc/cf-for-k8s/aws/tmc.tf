@@ -35,7 +35,7 @@ resource "tmc_cluster" "cluster" {
 resource "tmc_node_pool" "pools" {
   cluster_name      = tmc_cluster.cluster.name
   name              = "pool-${count.index}"
-  worker_node_count = 2
+  worker_node_count = 4
 
   node_labels = {
     az   = element(var.availability_zones, count.index)

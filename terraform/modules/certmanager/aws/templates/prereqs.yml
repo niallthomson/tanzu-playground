@@ -1,8 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-iam
+  namespace: ${namespace}
+type: Opaque
+data:
+  access_key: ${encodedAccessKey}
+  secret_access_key: ${encodedSecretAccessKey}
+---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
-  namespace: certmanager
+  namespace: ${namespace}
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -12,7 +22,7 @@ spec:
     solvers:
     - selector:
         dnsZones:
-            - "${domain}"
+        - "${domain}"
       dns01:
         route53:
           region: ${region}

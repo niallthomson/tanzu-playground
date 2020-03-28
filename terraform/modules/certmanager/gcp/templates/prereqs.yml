@@ -12,7 +12,7 @@ spec:
     solvers:
     - selector:
         dnsZones:
-            - "${domain}"
+        - "${domain}"
       dns01:
         clouddns:
           project: ${project}

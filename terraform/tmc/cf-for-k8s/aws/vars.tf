@@ -22,7 +22,7 @@ variable "region" {
 
 variable "availability_zones" {
   description = "The AWS availability zones to use within the selected region"
-  default     = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  default     = ["us-west-2a", "us-west-2b"]
   type        = list(string)
 }
 

@@ -4,8 +4,14 @@ resource "kubernetes_namespace" "certmanager" {
   }
 }
 
-data "template_file" "issuers" {
-  template = file("${path.module}/templates/issuer.yml")
+resource "null_resource" "in_blocker" {
+  provisioner "local-exec" {
+    command = "echo 'Unblocked on ${var.blocker}'"
+  }
+}
+
+data "template_file" "prereqs" {
+  template = file("${path.module}/templates/prereqs.yml")
 
   vars = {
     project      = var.project
@@ -15,17 +21,15 @@ data "template_file" "issuers" {
   }
 }
 
-resource "k14s_kapp" "pre_reqs" {
-  app = "nginx-ingress"
-  //app = "cert-manager-prereqs"
-  
+resource "k14s_kapp" "prereqs" {
+  app = "certmanager-prereqs"
   namespace = "default"
 
   files = [
     "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.13/deploy/manifests/00-crds.yaml"
   ]
 
-  config_yaml = data.template_file.issuers.rendered
+  config_yaml = data.template_file.prereqs.rendered
 }
 
 data "helm_repository" "jetstack" {
@@ -34,7 +38,7 @@ data "helm_repository" "jetstack" {
 }
 
 resource "helm_release" "certmanager" {
-  depends_on = [k14s_kapp.pre_reqs]
+  depends_on = [k14s_kapp.prereqs]
 
   name       = "certmanager"
   namespace  = kubernetes_namespace.certmanager.metadata[0].name
@@ -67,3 +71,6 @@ resource "helm_release" "certmanager" {
   }
 }
 
+resource "null_resource" "out_blocker" {
+  depends_on = [helm_release.certmanager]
+}

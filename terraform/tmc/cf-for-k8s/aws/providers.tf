@@ -1,5 +1,7 @@
 provider "aws" {
   region = var.region
+
+  version = "~> 2.54.0"
 }
 
 provider "tmc" {
@@ -14,6 +16,8 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.tmc_kubeconfig.kubeconfig.cluster_ca_certificate)
 
   load_config_file       = false
+
+  version = "~> 1.11.0"
 }
 
 provider "k14s" {

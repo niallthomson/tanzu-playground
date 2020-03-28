@@ -1,3 +1,9 @@
+resource "null_resource" "in_blocker" {
+  provisioner "local-exec" {
+    command = "echo ${var.blocker}"
+  }
+}
+
 module "certmanager" {
   source = "../../certmanager/aws"
 
@@ -5,15 +11,16 @@ module "certmanager" {
   region                     = var.region
   hosted_zone_id             = var.hosted_zone_id
   acme_email                 = var.acme_email
-  apply_service_account_name = var.apply_service_account_name
   domain                     = var.domain
+
+  blocker = null_resource.in_blocker.id
 }
 
 module "nginx_ingress" {
   source = "../../nginx-ingress"
   ytt_lib_dir      = var.ytt_lib_dir
 
-  blocker = var.blocker
+  blocker = null_resource.in_blocker.id
 }
 
 module "external_dns" {
@@ -24,7 +31,7 @@ module "external_dns" {
   domain_filter = var.domain
   zone_id_filter = var.hosted_zone_id
 
-  blocker = var.blocker
+  blocker = null_resource.in_blocker.id
 }
 
 module "welcome_app" {
@@ -36,7 +43,7 @@ module "welcome_app" {
   blocker = var.blocker
 }
 
-resource "null_resource" "blocker" {
+resource "null_resource" "out_blocker" {
   depends_on = [
     module.nginx_ingress,
     module.certmanager,

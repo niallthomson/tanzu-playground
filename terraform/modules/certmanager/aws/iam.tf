@@ -1,5 +1,5 @@
 resource "aws_iam_user" "user" {
-  name = "cnp-${var.environment_name}-iam-certmanager"
+  name = "${var.environment_name}-iam-certmanager"
 }
 
 resource "aws_iam_access_key" "key" {
@@ -7,7 +7,7 @@ resource "aws_iam_access_key" "key" {
 }
 
 resource "aws_iam_user_policy" "policy" {
-  name = "cnp-${var.environment_name}-iam-policy-certmanager"
+  name = "${var.environment_name}-iam-policy-certmanager"
   user = aws_iam_user.user.name
 
   policy = <<EOF

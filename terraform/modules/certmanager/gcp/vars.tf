@@ -11,3 +11,6 @@ variable "domain" {
 }
 
 variable "project" {}
+
+variable "blocker" {
+}
