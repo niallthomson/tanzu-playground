@@ -15,14 +15,14 @@ data "k14s_ytt" "externaldns" {
   ignore_unknown_comments = true
 }
 
-resource "null_resource" "blocker" {
+resource "null_resource" "in_blocker" {
   provisioner "local-exec" {
     command = "echo 'Unblocked on ${var.blocker}'"
   }
 }
 
 resource "k14s_kapp" "externaldns" {
-  depends_on = [null_resource.blocker]
+  depends_on = [null_resource.in_blocker]
 
   app = "externaldns"
   namespace = "default"
@@ -34,4 +34,8 @@ resource "k14s_kapp" "externaldns" {
     when    = destroy
     command = "sleep 90"
   }
+}
+
+resource "null_resource" "out_blocker" {
+  depends_on = [k14s_kapp.externaldns]
 }

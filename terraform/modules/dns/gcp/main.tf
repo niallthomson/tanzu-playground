@@ -17,10 +17,10 @@ resource "google_dns_record_set" "ns_record" {
   type = "NS"
 
   provisioner "local-exec" {
-    command = "sleep 30"
+    command = "sleep 90"
   }
 }
 
-resource "null_resource" "blocker" {
+resource "null_resource" "out_blocker" {
   depends_on = [google_dns_record_set.ns_record]
 }

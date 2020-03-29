@@ -8,5 +8,5 @@ module "certmanager" {
   dns_zone_name = module.dns.zone_name
   domain = module.dns.base_domain
 
-  blocker = google_container_cluster.default.endpoint
+  blocker = null_resource.cluster_blocker.id
 }

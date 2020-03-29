@@ -36,7 +36,7 @@ resource "tls_cert_request" "cf" {
   key_algorithm   = "RSA"
   private_key_pem = tls_private_key.cf.private_key_pem
 
-  dns_names = ["*.${local.sys_domain}", "*.cf-system.svc.cluster.local"]
+  dns_names = ["*.cf-system.svc.cluster.local"]
 
   subject {
     common_name         = "*.${local.sys_domain}"

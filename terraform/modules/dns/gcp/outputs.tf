@@ -7,5 +7,5 @@ output "zone_name" {
 }
 
 output "blocker" {
-  value = null_resource.blocker.id
+  value = null_resource.out_blocker.id
 }

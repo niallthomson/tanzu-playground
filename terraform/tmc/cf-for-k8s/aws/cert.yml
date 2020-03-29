@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: bleh
+  namespace: default
+  annotations:
+    kapp.k14s.io/change-group: "cf-for-k8s/certs"
+spec:
+  secretName: bleh
+  dnsNames:
+  - test.test3.aws.paasify.org
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

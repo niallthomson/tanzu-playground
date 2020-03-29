@@ -9,5 +9,5 @@ module "external_dns" {
 
   enable_istio = true
 
-  blocker = google_container_cluster.default.endpoint
+  blocker = null_resource.cluster_blocker.id
 }
