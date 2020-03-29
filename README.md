@@ -17,7 +17,14 @@ The Tanzu portfolio is compromised of various compomnents that work in the gener
 For example:
 - Kubernetes clusters
 - Configuring DNS (via Route53 etc.)
-- Installing Kubernetes foundational components, like ingress, external-dns, cert-manager etc.
+- Provisioning Lets Encrypt certificates via DNS solvers
+- Installing Kubernetes foundational components, like 
+  - Ingress
+  - external-dns
+  - cert-manager
+- Installing components related to software supply chain like:
+  - Concourse
+  - Spinnaker
 
 There are generally two types of modules included in the repository:
 1. Abstract, self-contained, re-usable modules for specific functions
