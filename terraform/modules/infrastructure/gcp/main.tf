@@ -5,8 +5,9 @@ module "certmanager" {
   project                    = var.project
   dns_zone_name              = var.dns_zone_name
   acme_email                 = var.acme_email
-  apply_service_account_name = var.apply_service_account_name
   domain                     = var.domain
+
+  blocker = var.blocker
 }
 
 module "nginx_ingress" {
