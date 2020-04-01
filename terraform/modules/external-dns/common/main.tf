@@ -1,4 +1,4 @@
-data "k14s_ytt" "externaldns" {
+data "k14sx_ytt" "externaldns" {
   files = [
     //"https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.6/docs/examples/external-dns.yaml",
     "${var.ytt_lib_dir}/external-dns"
@@ -21,13 +21,13 @@ resource "null_resource" "in_blocker" {
   }
 }
 
-resource "k14s_kapp" "externaldns" {
+resource "k14sx_kapp" "externaldns" {
   depends_on = [null_resource.in_blocker]
 
   app = "externaldns"
   namespace = "default"
 
-  config_yaml = data.k14s_ytt.externaldns.result
+  config_yaml = data.k14sx_ytt.externaldns.result
 
   // Sleep before destroying so external-dns has time to clean up records
   provisioner "local-exec" {
@@ -37,5 +37,5 @@ resource "k14s_kapp" "externaldns" {
 }
 
 resource "null_resource" "out_blocker" {
-  depends_on = [k14s_kapp.externaldns]
+  depends_on = [k14sx_kapp.externaldns]
 }

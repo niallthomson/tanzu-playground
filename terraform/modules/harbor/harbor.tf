@@ -25,7 +25,7 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_kapp" "harbor_cert" {
+resource "k14sx_kapp" "harbor_cert" {
   depends_on = [null_resource.blocker]
   app = "harbor-cert"
   
@@ -50,7 +50,7 @@ data "template_file" "harbor_config" {
 }
 
 resource "helm_release" "harbor" {
-  depends_on = [k14s_kapp.harbor_cert]
+  depends_on = [k14sx_kapp.harbor_cert]
 
   name       = "harbor"
   namespace  = kubernetes_namespace.harbor.metadata[0].name

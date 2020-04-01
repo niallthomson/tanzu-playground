@@ -20,7 +20,7 @@ provider "kubernetes" {
   version = "~> 1.11.0"
 }
 
-provider "k14s" {
+provider "k14sx" {
   kapp {
     kubeconfig_yaml = data.tmc_kubeconfig.kubeconfig.content
   }

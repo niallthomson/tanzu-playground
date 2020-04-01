@@ -41,7 +41,7 @@ data "template_file" "values" {
   }
 }
 
-data "k14s_ytt" "cf_for_k8s" {
+data "k14sx_ytt" "cf_for_k8s" {
   files = [
     "${var.ytt_lib_dir}/cf-for-k8s/vendor/github.com/cloudfoundry/cf-for-k8s/config",
     "${var.ytt_lib_dir}/cf-for-k8s/patch",
@@ -59,11 +59,11 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_kapp" "cf_for_k8s" {
+resource "k14sx_kapp" "cf_for_k8s" {
   depends_on = [null_resource.blocker]
   
   app = "cf"
   namespace = "default"
 
-  config_yaml = data.k14s_ytt.cf_for_k8s.result
+  config_yaml = data.k14sx_ytt.cf_for_k8s.result
 }

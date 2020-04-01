@@ -1,4 +1,4 @@
-data "k14s_ytt" "nginx" {
+data "k14sx_ytt" "nginx" {
   files = ["${var.ytt_lib_dir}/nginx-ingress"]
 
   values = {
@@ -12,11 +12,11 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_kapp" "nginx" {
+resource "k14sx_kapp" "nginx" {
   depends_on = [null_resource.blocker]
   
   app = "nginx-ingress"
   namespace = "default"
 
-  config_yaml = data.k14s_ytt.nginx.result
+  config_yaml = data.k14sx_ytt.nginx.result
 }

@@ -25,7 +25,7 @@ data "template_file" "prereqs" {
   }
 }
 
-resource "k14s_kapp" "prereqs" {
+resource "k14sx_kapp" "prereqs" {
   depends_on = [null_resource.in_blocker]
 
   app = "certmanager-prereqs"
@@ -44,7 +44,7 @@ data "helm_repository" "jetstack" {
 }
 
 resource "helm_release" "certmanager" {
-  depends_on = [k14s_kapp.prereqs]
+  depends_on = [k14sx_kapp.prereqs]
 
   name       = "certmanager"
   namespace  = kubernetes_namespace.certmanager.metadata[0].name

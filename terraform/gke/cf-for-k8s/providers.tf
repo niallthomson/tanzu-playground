@@ -14,7 +14,7 @@ provider "kubernetes" {
   load_config_file = false
 }
 
-provider "k14s" {
+provider "k14sx" {
   kapp {
     kubeconfig_yaml = data.template_file.kubeconfig.rendered
   }

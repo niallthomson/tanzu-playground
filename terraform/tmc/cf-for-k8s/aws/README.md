@@ -46,7 +46,7 @@ output "cf_admin_password" {
 The following are pre-requisites to run the above Terraform:
 - AWS account, with `aws` CLI logged in locally
 - Terraform 0.12 installed
-- [terraform-provider-k14s](https://github.com/k14s/terraform-provider-k14s) installed as a TF plugin
+- Custom [terraform-provider-k14sx](https://github.com/niallthomson/terraform-provider-k14s) provider installed as a TF plugin
 - `terraform-provider-tmc` installed (NOTE: This provider is currently not publicly available, contact @niallt on VMware Slack for information)
 - DNS set up meeting the appropriate standards ([see here](/terraform/docs/dns.md))
 

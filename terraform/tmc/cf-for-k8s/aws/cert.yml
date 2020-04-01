@@ -4,7 +4,7 @@ metadata:
   name: bleh
   namespace: default
   annotations:
-    kapp.k14s.io/change-group: "cf-for-k8s/certs"
+    kapp.k14sx.io/change-group: "cf-for-k8s/certs"
 spec:
   secretName: bleh
   dnsNames:

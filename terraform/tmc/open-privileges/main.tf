@@ -1,4 +1,4 @@
-data "k14s_ytt" "tmc_psp" {
+data "k14sx_ytt" "tmc_psp" {
   files = ["${var.ytt_lib_dir}/tmc-privileges"]
 }
 
@@ -8,11 +8,11 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_kapp" "tmc_psp" {
+resource "k14sx_kapp" "tmc_psp" {
   depends_on = [null_resource.blocker]
   
   app = "tmc-psp"
   namespace = "default"
 
-  config_yaml = data.k14s_ytt.tmc_psp.result
+  config_yaml = data.k14sx_ytt.tmc_psp.result
 }

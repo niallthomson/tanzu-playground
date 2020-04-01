@@ -1,4 +1,4 @@
-data "k14s_ytt" "welcome_app" {
+data "k14sx_ytt" "welcome_app" {
   files = ["${var.ytt_lib_dir}/welcome-app"]
 
   values = {
@@ -13,11 +13,11 @@ resource "null_resource" "blocker" {
   }
 }
 
-resource "k14s_kapp" "welcome_app" {
+resource "k14sx_kapp" "welcome_app" {
   depends_on = [null_resource.blocker]
   
   app = "welcome-app"
   namespace = "default"
 
-  config_yaml = data.k14s_ytt.welcome_app.result
+  config_yaml = data.k14sx_ytt.welcome_app.result
 }
