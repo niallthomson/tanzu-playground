@@ -7,7 +7,10 @@ It will:
 - Create a Google Cloud DNS hosted zone and wire it up to an existing base zone
 - Install `cf-for-k8s` from the official `ytt` configuration
 - Install `external-dns` and ensure its configured correctly
+- Installs Harbor registry in the cluster
+- Configures `cf-for-k8s` to use that Harbor registry for buildpacks
 - Output information to connect to the Cloud Foundry API endpoint
+- Output information to access the Harbor registry
 
 Example:
 
@@ -34,6 +37,18 @@ output "cf_admin_username" {
 
 output "cf_admin_password" {
   value       = module.cf_for_k8s.cf_admin_password
+}
+
+output "harbor_endpoint" {
+  value       = module.cf_for_k8s.harbor_endpoint
+}
+
+output "harbor_admin_username" {
+  value       = module.cf_for_k8s.harbor_admin_username
+}
+
+output "harbor_admin_password" {
+  value       = module.cf_for_k8s.harbor_admin_password
 }
 ```
 

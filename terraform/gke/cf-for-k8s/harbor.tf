@@ -1,6 +1,6 @@
 
 module "harbor" {
-  source = "../../../modules/harbor"
+  source = "../../modules/harbor"
 
   domain = module.dns.base_domain
 

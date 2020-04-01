@@ -27,7 +27,7 @@ resource "google_container_cluster" "default" {
 
   // Wait for cluster to stabilize
   provisioner "local-exec" {
-    command = "sleep 60"
+    command = "sleep 90"
   }
 
   // Wait for the GCE LB controller to cleanup the resources.

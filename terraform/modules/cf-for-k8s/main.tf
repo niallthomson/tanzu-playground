@@ -38,6 +38,11 @@ data "template_file" "values" {
     internal_tls_cert        = base64encode(tls_locally_signed_cert.cf.cert_pem)
     internal_tls_key         = base64encode(tls_private_key.cf.private_key_pem)
     internal_tls_ca_cert     = base64encode(tls_self_signed_cert.acme_ca.cert_pem)
+
+    registry_domain     = var.registry_domain
+    registry_repository = var.registry_repository
+    registry_username   = var.registry_username
+    registry_password   = var.registry_password
   }
 }
 

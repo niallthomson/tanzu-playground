@@ -8,5 +8,10 @@ module "cf-for-k8s" {
   tls_key     = module.acme.cert_key
   tls_ca_cert = module.acme.cert_ca
 
-  blocker = module.certmanager.blocker
+  registry_domain       = module.harbor.harbor_domain
+  registry_repository   = "${module.harbor.harbor_domain}/library"
+  registry_username     = module.harbor.harbor_admin_username
+  registry_password     = module.harbor.harbor_admin_password
+
+  blocker = module.infrastructure.blocker
 }

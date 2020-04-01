@@ -179,3 +179,9 @@ eirini:
   tls:
     crt: *crt
     key: *key
+
+app_registry:
+  hostname: ${registry_domain}
+  repository: ${registry_repository}
+  username: ${registry_username}
+  password: ${registry_password}

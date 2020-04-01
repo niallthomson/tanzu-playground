@@ -28,8 +28,9 @@ module "external_dns" {
   ytt_lib_dir      = var.ytt_lib_dir
 
   environment_name = var.environment_name
-  domain_filter = var.domain
-  zone_id_filter = var.hosted_zone_id
+  domain_filter    = var.domain
+  zone_id_filter   = var.hosted_zone_id
+  enable_istio     = var.enable_istio
 
   blocker = null_resource.in_blocker.id
 }

@@ -13,10 +13,11 @@ variable "acme_email" {
 variable "dns_zone_name" {
 }
 
-variable "apply_service_account_name" {
+variable "domain" {
 }
 
-variable "domain" {
+variable "enable_istio" {
+  default = false
 }
 
 variable "blocker" {}

@@ -22,8 +22,9 @@ module "external_dns" {
   ytt_lib_dir      = var.ytt_lib_dir
 
   environment_name = var.environment_name
-  domain_filter = var.domain
-  zone_id_filter = var.dns_zone_name
+  domain_filter    = var.domain
+  zone_id_filter   = var.dns_zone_name
+  enable_istio     = var.enable_istio
 
   blocker = var.blocker
 }
@@ -40,8 +41,8 @@ module "welcome_app" {
 resource "null_resource" "blocker" {
   depends_on = [
     module.nginx_ingress,
-    //module.certmanager,
-    //module.external_dns,
+    module.certmanager,
+    module.external_dns,
     module.welcome_app,
   ]
 }
