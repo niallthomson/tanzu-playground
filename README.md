@@ -32,7 +32,16 @@ There are generally two types of modules included in the repository:
 
 Below is a summary of the aggregate modules that may be of immediate use.
 
-| Module | Purpose | TMC (AWS) | GKE |
-|---|---|---|---|
-| `simple-cluster` | Basic Kubernetes cluster with ingress, external-dns and certmanager | [Link](terraform/tmc/simple-cluster/aws/README.md) | [Link](terraform/gke/simple-cluster/README.md) |
-| `cf-for-k8s` | Simple installation of Cloud Foundry on Kubernetes | [Link](terraform/tmc/cf-for-k8s/aws/README.md) | [Link](terraform/gke/cf-for-k8s/README.md) |
+| Module | Purpose | TMC (AWS) | GKE | EKS |
+|---|---|---|---|---|
+| `simple-cluster` | Basic Kubernetes cluster with ingress, external-dns and certmanager | [Link](terraform/tmc/simple-cluster/aws/README.md) | [Link](terraform/gke/simple-cluster/README.md) | [Link](terraform/eks/simple-cluster/README.md) |
+| `cf-for-k8s` | Simple installation of Cloud Foundry on Kubernetes | [Link](terraform/tmc/cf-for-k8s/aws/README.md) | [Link](terraform/gke/cf-for-k8s/README.md) | [Link](terraform/eks/cf-for-k8s/README.md) |
+
+
+### Providers
+
+The modules in this repository may use one or more custom Terraform providers:
+- A custom [k14s](https://github.com/niallthomson/terraform-provider-k14s) Terraform provider, which can be installed alongside the official one
+- A Tanzu Mission Control Terraform provider, which is currently internal to VMware (only required for TMC modules)
+
+Please carefully study the `README` for each module to understand any corresponding custom module dependencies.

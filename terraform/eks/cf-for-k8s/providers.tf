@@ -29,7 +29,7 @@ provider "helm" {
 
 provider "k14sx" {
   kapp {
-    kubeconfig_yaml = data.template_file.kubeconfig.rendered
+    kubeconfig_yaml = module.kubeconfig.content
   }
 }
 
