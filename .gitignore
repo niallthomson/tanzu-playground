@@ -3,4 +3,4 @@
 .terraform/
 test
 kubeconfig
-crash.log
+*.log
